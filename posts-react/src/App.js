@@ -1,24 +1,35 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+import axios from 'axios';
+
 import './App.css';
+import PostCard from './components/PostCard';
 
 class App extends Component {
+  constructor(){
+    super();
+    this.state = {
+      posts: []
+    }
+  }
+  componentDidMount(){
+    axios
+      .get('http://localhost:9090/api/posts/')
+      .then(res => this.setState({posts: res.data}))
+      .catch(err => console.log(err))
+  }
   render() {
     return (
       <div className="App">
         <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
+          <h1>Posts</h1>
+          <div className="posts-list">
+            {this.state.posts.map(post => (
+              <PostCard 
+                title={post.title}
+                contents={post.contents}
+              />
+              ))}
+          </div>
         </header>
       </div>
     );
