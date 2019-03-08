@@ -5,9 +5,10 @@ const router = express.Router();
 const Posts = require('../data/db')
 
 router.get('/', async (req, res) => {
+  const postMessage = process.env.PM || 'Hello World! This is the post message.';
   try {
-    const posts = await Posts.find(req.query);
-    res.status(201).json(posts);
+    const posts = await Posts.find();
+    res.status(201).json({message: postMessage, posts});
   } catch (error) {
     res.status(500).json({error: "The posts information could not be retrieved."})
   }
